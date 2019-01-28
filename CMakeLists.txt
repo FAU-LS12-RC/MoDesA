@@ -1,31 +1,17 @@
 #################################################################################
-# --------------------------------------------------------------------------     
-# Copyright (c) 2017 Hardware-Software-Co-Design, Friedrich-                     
-# Alexander-Universitaet Erlangen-Nuernberg (FAU), Germany.                      
-# All rights reserved.                                                           
-#                                                                                
-#                                                                                
-# This code and any associated documentation is provided "as is"                 
-#                                                                                
-# IN NO EVENT SHALL HARDWARE-SOFTWARE-CO-DESIGN, FRIEDRICH-ALEXANDER-            
-# UNIVERSITAET ERLANGEN-NUERNBERG (FAU) BE LIABLE TO ANY PARTY FOR DIRECT,       
-# INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT            
-# OF THE USE OF THIS CODE AND ITS DOCUMENTATION, EVEN IF HARDWARE-               
-# SOFTWARE-CO-DESIGN, FRIEDRICH-ALEXANDER-UNIVERSITAET ERLANGEN-NUERNBERG        
-# (FAU) HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. THE                  
-# AFOREMENTIONED EXCLUSIONS OF LIABILITY DO NOT APPLY IN CASE OF INTENT          
-# BY HARDWARE-SOFTWARE-CO-DESIGN, FRIEDRICH-ALEXANDER-UNIVERSITAET               
-# ERLANGEN-NUERNBERG (FAU).                                                      
-#                                                                                
-# HARDWARE-SOFTWARE-CO-DESIGN, FRIEDRICH-ALEXANDER-UNIVERSITAET ERLANGEN-        
-# NUERNBERG (FAU), SPECIFICALLY DISCLAIMS ANY WARRANTIES, INCLUDING, BUT         
-# NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS          
-# FOR A PARTICULAR PURPOSE.                                                      
-#                                                                                
-# THE CODE PROVIDED HEREUNDER IS ON AN "AS IS" BASIS, AND HARDWARE-              
-# SOFTWARE-CO-DESIGN, FRIEDRICH-ALEXANDER-UNIVERSITAET ERLANGEN-                 
-# NUERNBERG (FAU) HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT,             
-# UPDATES, ENHANCEMENTS, OR MODIFICATIONS.                                       
+#   Copyright 2019, University of Erlangen-Nuremberg
+#
+#   Licensed under the Apache License, Version 2.0 (the "License");
+#   you may not use this file except in compliance with the License.
+#   You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#   Unless required by applicable law or agreed to in writing, software
+#   distributed under the License is distributed on an "AS IS" BASIS,
+#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#   See the License for the specific language governing permissions and
+#   limitations under the License.                              
 # -------------------------------------------------------------------------      
 #                                                                                
 #  @author Streit Franz-Josef                                                    
