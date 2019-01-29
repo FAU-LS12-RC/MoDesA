@@ -1,0 +1,141 @@
+----------------------------------------------------------------------------     
+-- -------------------------------------------------------------------------  
+--   Copyright (c) 2017 Hardware-Software-Co-Design, Friedrich-
+--   Alexander-Universitaet Erlangen-Nuernberg (FAU), Germany.
+--   All rights reserved.
+--
+--   Licensed under the Apache License, Version 2.0 (the "License");
+--   you may not use this file except in compliance with the License.
+--   You may obtain a copy of the License at
+--
+--       http://www.apache.org/licenses/LICENSE-2.0
+--
+--   Unless required by applicable law or agreed to in writing, software
+--   distributed under the License is distributed on an "AS IS" BASIS,
+--   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+--   See the License for the specific language governing permissions and
+--   limitations under the License.
+-- ------------------------------------------------------------------------- 
+--                                                                                
+--  @author  Benjamin Hackenberg Streit Franz-Josef                                                    
+--  @mail    franz-josef.streit@fau.de                                                   
+--  @date    20 June 2018                                                      
+--  @version 0.1                                                                  
+--  @brief   Automatically generated RTL Testbench to test  
+--           block designs with the AXI4-Stream standard 
+--                                                                                
+--                                                                                
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_textio.all;
+use ieee.numeric_std.all;
+
+library std;
+use std.textio.all;
+
+-------------
+-- stimuli --
+-------------
+entity test_design_1 is
+  generic ( 
+  @in_files@
+  @out_files@
+  DUMMY: string := ""
+); 
+end test_design_1;
+
+
+architecture TB of test_design_1 is
+----------------------------
+-- component declarations --
+----------------------------
+component design_1 is
+  port (
+  clk : in STD_LOGIC;
+  @input1@
+  @output1@
+  rst : in STD_LOGIC
+);
+end component design_1;
+
+-------------------------
+-- signal declarations --
+-------------------------
+constant PERIOD : time := @clock_periode@ ns; 
+@frame_sizes_in@
+@frame_sizes_out@
+
+signal clk : STD_LOGIC := '0';
+signal rst : STD_LOGIC := '1';
+@input2@
+@output2@
+
+
+@cnt_in@
+@cnt_out@
+signal frame_cnt : integer range 0 to 83 := 0; 
+signal clk_cnt : integer range 1 to 10000000 :=1;
+
+
+type stateSTIMULItype is(NEW_FILE, IDLE, SEND_DATA);
+signal stateSTIMULI : stateSTIMULItype := IDLE;
+
+begin
+------------------------------
+-- component instantiations --
+------------------------------
+DUT: component design_1 
+port map (
+          clk => clk,
+          @input3@
+          @output3@
+          rst => not rst
+        );
+
+clk <= not clk after PERIOD/2;
+rst <= '0' after PERIOD*2;
+
+-- Read data from file
+read_file_pr : process
+  variable line_num : line;
+  @var_data_read@
+  @file_in@
+begin
+  wait until rising_edge(clk);
+  if (rst = '1') then
+    @read1@
+    stateSTIMULI <= IDLE;
+  else
+    case stateSTIMULI is
+      when IDLE =>
+        @read1@
+        stateSTIMULI <= SEND_DATA;
+      when SEND_DATA =>
+        @read2@	
+	@check_idle@
+      when others =>
+        stateSTIMULI <= IDLE;                                       
+    end case;       
+  end if;
+end process read_file_pr; 
+
+-- Write data to file
+write_file_pr : process
+  variable line_num : line;
+  @var_data_write@
+  @file_out@
+begin
+  wait until rising_edge(clk);
+  if (rst = '1') then        
+    @write1@
+  else
+    clk_cnt<=clk_cnt+1;
+    @write2@
+    @write3@
+  end if;
+end process write_file_pr; 
+
+end TB;
+

@@ -1,5 +1,8 @@
 #################################################################################
-#   Copyright 2019, University of Erlangen-Nuremberg
+# -------------------------------------------------------------------------  
+#   Copyright (c) 2017 Hardware-Software-Co-Design, Friedrich-
+#   Alexander-Universitaet Erlangen-Nuernberg (FAU), Germany.
+#   All rights reserved.
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -12,12 +15,13 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.                              
-# -------------------------------------------------------------------------      
-#                                                                                
-#  @author Streit Franz-Josef                                                    
-#  @date   09 November 2017                                                      
+# -------------------------------------------------------------------------  
+#
+#  @author  Streit Franz-Josef 
+#  @mail    franz-josef.streit@fau.de                                                   
+#  @date    09 November 2017                                                      
 #  @version 0.1                                                                  
-#  @brief MoDesA config  
+#  @brief   MoDesA config  
 #                                                                                
 #                                                                                
 #  usage: create a build folder and run CMAKE in this folder with the command: 
@@ -51,17 +55,17 @@ set(synthesis "on")
 # model need to be in models folder
 #
 
-#set(model_name "test_model_hw_only")
+set(model_name "test_model_hw_only")
 #set(model_name "test_model_hw_sw")
 #set(model_name "test_model_hw_sw_hw_sw")
 #set(model_name "test_model_sw_hw")
-set(model_name "test_model_sw_only")
+#set(model_name "test_model_sw_only")
 
 set(model_path "test_model")
 
 
 # default option to profile sw execution of the model
-set(profiling "on")
+set(profiling "off")
 # default device = ZedBoard
 set(device "xc7z020clg484-1")
 # default clk = 10 ns = 100MHz
