@@ -17,7 +17,7 @@ The following tags are currently supported in MoDesA:
 The blocks can be tagged by right click on the block -> Properties... and then entering in the field Tag: `hw_ip` or `sw`.
 <figure><img src="img/block_tagging.png" alt="Simulink Block tagging" width="30%" height="30%"></figure>
 Blocks with no tagging are ignored for code generation, which can be used for data sink or/and data source blocks.
-For hardware/software tagged Simulink models MoDesA will generate a Hardware/Software Co-Desing like the one from [test_model_hw_sw_hw_sw](models/test_model/test_model_hw_sw_hw_sw.slx) with the Zynq processing system and corresponding read and write adapters.
+For hardware/software tagged Simulink models MoDesA will generate a Hardware/Software Co-Desing like the one from [test_model_hw_sw_hw_sw](models/test_model/test_model_hw_sw_hw_sw.slx) with the Zynq and corresponding read and write adapters.
 
 <figure><img src="img/hwsw_block_design.png" alt="Test model hw sw hw sw" width="50%" height="50%"></figure>
 
