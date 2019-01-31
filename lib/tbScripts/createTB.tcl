@@ -43,11 +43,13 @@ set num_outports [llength $tb_outports]
 
 #set input path for stimuli files and output path for results
 for {set i 0} {$i < $num_inports} {incr i} {
-
-	append stimuli_in "FILE_IN${i}: string := \"$BUILDDIR/stimuli/stimuli${i}/0.hex\";\n"
+	append stimuli_in "FILE_IN${i}: string := \"$BUILDDIR/stimuli/input[expr $i+1]/0.hex\";\n"
 }
+
 for {set i 0} {$i < $num_outports} {incr i} {
-	append stimuli_out "FILE_OUT${i}: string := \"$BUILDDIR/stimuli/stimuli${i}/out0.hex\";\n"
+        # create directories for output files per outport
+        file mkdir "$BUILDDIR/stimuli/output[expr $i+1]"
+	append stimuli_out "FILE_OUT${i}: string := \"$BUILDDIR/stimuli/output[expr $i+1]/0.hex\";\n"
 }
 
 # set init values depending on byte size e.g. 0x0000 for 2 bytes

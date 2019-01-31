@@ -36,7 +36,7 @@ In the [CMakeLists.txt](CMakeLists.txt) file the user specifies the following pa
 `syn_opt`   |  `fast` or `accurate` Vivado HLS synthesis option
 
 The generated hardware IP blocks are using the AXI4-Stream interface for pipelined data streaming, which only supports sequential data access. Unfortunately, not all blocks within the Simulink library comply with these access patterns, and if
-this cannot be guaranteed, the synthesis will fail. To address this issue, we provide a Simulink block called frame buffer. This block is available in our custom library [MoDesA_lib](matlab/MoDesA_lib.slx). Additional, to generate stimuli files for hardware verification the [MoDesA_lib](matlab/MoDesA_lib.slx) provides a write stimuli block, which can be inserted in the model.
+this cannot be guaranteed, the synthesis will fail. To address this issue, we provide a Simulink block called frame_buffer. This block is available in our custom library [MoDesA_lib](matlab/MoDesA_lib.slx). Additional, to generate stimuli files for hardware verification the [MoDesA_lib](matlab/MoDesA_lib.slx) provides a write stimuli block, which can be inserted in the model.
 
 ### Prerequisites
 * [CMake](https://cmake.org/) - Used to configure and create projects 
@@ -48,7 +48,7 @@ this cannot be guaranteed, the synthesis will fail. To address this issue, we pr
 Before running the test, make sure all models in the [test_model](models/test_model) folder are exported/saved to your installed MATLAB version. (The provided test models were created from our side with MATLAB/Simulink R2017.a)
 Next, make sure MATLAB and Vivado/Vivado HLS is set in your environment variables and can be accessed from the command line.
 
-### On Linux
+### On Unix/Linux
 Open a terminal and run:
 ```bash
 # navigate to your MoDesA folder
@@ -62,20 +62,28 @@ make all
 # Create Vivado Project
 make Vivado_test_model_hw_only
 ```
+** Terminal Output **
+![Terminal output](img/linux_output_hw_only.gif)
+
 ### On Windows
 
+** GUI Steps **
+<video width="320" height="240" controls> <source src="img/windows_output_hw_only.mp4" type="video/mp4">Your browser does not support the video tag.</video> 
 
-In Vivado a block design is generated, which looks like the following:
+In Vivado a block design will be generated, which looks like the following:
 <figure><img src="img/hw_only_block_design.png" alt="Test model hw_only objectives" width="50%" height="50%"></figure>
-In your build folder you should find a report called hw_objectives.html with the estimated hardware resources and latency constraints for every block in the model based on HLS.
-<figure><img src="img/hw_objectives.png" alt="Test model hw_only block design" width="50%" height="50%"></figure>
+In your build folder you should find a report called *hw_objectives.html* with the estimated hardware resources and latency constraints derived by HLS for every block in the model.
+<figure><img src="img/hw_only_hw_objectives.png" alt="Test model hw_only block design" width="50%" height="50%"></figure>
 For a bit and cycle accurate simulation of the model start first a synthesis by clicking Run Synthesis in Vivado.
 If synthesis is complete, you can click Run Simulation -> Run Post-Synthesis Functional Simulation.
 Vivado will use the automatically generated testbench and stimuli files for simulation. The Simulation will display the expected result.
-<figure><img src="img/waveform.png" alt="Test model hw_only waveform" width="50%" height="50%"></figure>
+<figure><img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" width="50%" height="50%"></figure>
   
 ## Authors
 See the [AUTHORS](AUTHORS) file for details
+
+## ToDo
+  * Add option for Chip softcore processor generation per Simulink block.
 
 ## License
 
