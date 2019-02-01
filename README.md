@@ -15,14 +15,16 @@ The following tags are currently supported in MoDesA:
   * `sw`
 
 The blocks can be tagged by right click on the block -> Properties... and then entering in the field Tag: `hw_ip` or `sw`.
-<a href="link" style="text-align: center">
-<figure><img src="img/block_tagging.png" alt="Simulink Block tagging" class="center" width="40%" height="40%"></figure>
-</a>
+<p align="center">
+ <img src="img/block_tagging.png" alt="Simulink Block tagging" class="center" width="40%" height="40%"/>
+</p>
+
 Blocks with no tagging are ignored for code generation, which can be used for data sink or/and data source blocks.
 For hardware/software tagged Simulink models MoDesA will generate a Hardware/Software Co-Design like the one from [test_model_hw_sw_hw_sw](models/test_model/test_model_hw_sw_hw_sw.slx) with the Zynq and corresponding read and write adapters.
 
-<figure><img src="img/hwsw_block_design.png" alt="Test model hw sw hw sw" class="center" width="80%" height="80%"></figure>
-
+<p align="center">
+<img src="img/hwsw_block_design.png" alt="Test model hw sw hw sw" class="center" width="100%" height="100%"/>
+</p>
 
 In the [CMakeLists.txt](CMakeLists.txt) file the user specifies the following parameters:
   
@@ -66,6 +68,7 @@ cmake ..
 ```
 
 ** Terminal Output **
+
 ![Terminal output](img/linux_cmake_codegen.gif)
 
 If code generation was successful you can generate IP blocks from the model by running:
@@ -75,6 +78,7 @@ make all
 ```
 
 ** Terminal Output **
+
 ![Terminal output](img/linux_make_all_codegen.gif)
 
 If IP block generation was successful you can generate the Vivado project by running:
@@ -83,6 +87,7 @@ If IP block generation was successful you can generate the Vivado project by run
 make Vivado_test_model_hw_only
 ```
 ** Terminal Output **
+
 ![Terminal output](img/linux_make_vivado_codegen.gif)
 
 
@@ -93,17 +98,23 @@ After CMake configuration with this setting is done the user needs to switch the
 Now the user can generate the project files and open the project from CMake.
 In Microsoft Visual Studio the user needs to create ALL_BUILD to generate the IP Blocks. If generation was successful, he can create the Vivado_test_model_hw_only project.
 
-** GUI Steps on Windows **
-<video width="320" height="240" controls> <source src="img/windows_output_hw_only.mp4" type="video/mp4">Your browser does not support the video tag.</video> 
+> Video GUI Steps on Windows
+[![Watch the video](img/video_img.png)](https://youtu.be/3QI5QKn2B-8)
 
 In Vivado a block design will be generated, which looks like the following:
-<figure><img src="img/hw_only_block_design.png" alt="Test model hw_only objectives" class="center" width="80%" height="80%"></figure>
+<p align="center">
+ <img src="img/hw_only_block_design.png" alt="Test model hw_only objectives" class="center" width="100%" height="100%"\>
+</p>
 In your build folder you should find a report called *hw_objectives.html* with the estimated hardware resources and latency constraints derived by HLS for every block in the model.
-<figure><img src="img/hw_only_hw_objectives.png" alt="Test model hw_only block design" class="center" width="80%" height="80%"></figure>
+<p align="center">
+ <img src="img/hw_objectives.png" alt="Test model hw_only block design" class="center" width="60%" height="60%"\>
+</p>
 For a bit and cycle accurate simulation of the model start first a synthesis by clicking Run Synthesis in Vivado.
 If synthesis is complete, you can click Run Simulation -> Run Post-Synthesis Functional Simulation.
 Vivado will use the automatically generated testbench and stimuli files for simulation. The Simulation will display the expected result.
-<figure><img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" class="center" width="80%" height="80%"></figure>
+<p align="center">
+ <img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" class="center" width="100%" height="100%"\>
+</p>
   
 ## Authors
 See the [AUTHORS](AUTHORS) file for details
