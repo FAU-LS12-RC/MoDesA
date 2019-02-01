@@ -51,8 +51,8 @@ this cannot be guaranteed, the synthesis will fail. To address this issue, we pr
 
 ## Running the [test_model_hw_only](models/test_model/test_model_hw_only.slx) test
 Before running the test, make sure all models in the [test_model](models/test_model) folder are exported/saved to your installed MATLAB version. 
-If your current version is newer than R2017.a (the provided test models were created from our side with MATLAB/Simulink R2017.a) you can just save the model with your installed version and delete the old .R2017a backup model file.
-If your current version is older than R2017.a send us a mail and we will export the test models to your version.
+If your current version is newer than R2017.a, (the provided test models were created from our side with MATLAB/Simulink R2017.a) you can just save the model with your installed version and delete the old .R2017a backup model file.
+If your current version is older than R2017.a, send us a mail and we will export the test models to your version.
 
 Next, make sure MATLAB and Vivado/Vivado HLS is set in your environment PATH variable and can be accessed from the command line.
 
@@ -71,7 +71,7 @@ cmake ..
 
 ![Terminal output](img/linux_cmake_codegen.gif)
 
-If code generation was successful you can generate IP blocks from the model by running:
+If code generation was successful, you can generate IP blocks from the model by running:
 ```bash
 # Create IP Blocks
 make all
@@ -81,7 +81,7 @@ make all
 
 ![Terminal output](img/linux_make_all_codegen.gif)
 
-If IP block generation was successful you can generate the Vivado project by running:
+If IP block generation was successful, you can generate the Vivado project by running:
 ```bash
 # Create Vivado Project
 make Vivado_test_model_hw_only
@@ -96,7 +96,7 @@ MATLAB runs on Windows not within the command line. Therefore the code generatio
 First, the [CMakeLists](CMakeLists.txt) file needs the option `matlab` `on` and `synthesis` `off`.
 After CMake configuration with this setting is done the user needs to switch the `matlab` option to `off` and the  `synthesis` option to `on`.
 Now the user can generate the project files and open the project from CMake.
-In Microsoft Visual Studio the user needs to create ALL_BUILD to generate the IP Blocks. If generation was successful, he can create the Vivado_test_model_hw_only project.
+In Microsoft Visual Studio the user needs to create ALL_BUILD to generate the IP Blocks. If generation was successful, the user can create the Vivado_test_model_hw_only project.
 
 > Video GUI Steps on Windows
 [![Watch the video](img/video_img.png)](https://youtu.be/3QI5QKn2B-8)
