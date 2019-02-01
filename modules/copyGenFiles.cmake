@@ -26,14 +26,11 @@
 ##
 
 function(copyGenFiles ipb_folders chip_folders model)
-  if(matlab)
-    set(__matlab__ on)
-  endif(matlab)
 
   # find all generated folders of the given model and copy them into build folder
   # afterwards copy template files into it
 
-  if(matlab)
+  if(synthesis)
     set(matlab_dir "${CMAKE_CURRENT_SOURCE_DIR}/matlab")
     file(GLOB folders RELATIVE ${matlab_dir} ${matlab_dir}/${model}*[_hw,_sw,_chip])
     foreach(folders ${folders})

@@ -15,11 +15,13 @@ The following tags are currently supported in MoDesA:
   * `sw`
 
 The blocks can be tagged by right click on the block -> Properties... and then entering in the field Tag: `hw_ip` or `sw`.
-<figure><img src="img/block_tagging.png" alt="Simulink Block tagging" width="30%" height="30%"></figure>
+<a href="link" style="text-align: center">
+<figure><img src="img/block_tagging.png" alt="Simulink Block tagging" class="center" width="40%" height="40%"></figure>
+</a>
 Blocks with no tagging are ignored for code generation, which can be used for data sink or/and data source blocks.
-For hardware/software tagged Simulink models MoDesA will generate a Hardware/Software Co-Desing like the one from [test_model_hw_sw_hw_sw](models/test_model/test_model_hw_sw_hw_sw.slx) with the Zynq and corresponding read and write adapters.
+For hardware/software tagged Simulink models MoDesA will generate a Hardware/Software Co-Design like the one from [test_model_hw_sw_hw_sw](models/test_model/test_model_hw_sw_hw_sw.slx) with the Zynq and corresponding read and write adapters.
 
-<figure><img src="img/hwsw_block_design.png" alt="Test model hw sw hw sw" width="50%" height="50%"></figure>
+<figure><img src="img/hwsw_block_design.png" alt="Test model hw sw hw sw" class="center" width="80%" height="80%"></figure>
 
 
 In the [CMakeLists.txt](CMakeLists.txt) file the user specifies the following parameters:
@@ -39,51 +41,75 @@ The generated hardware IP blocks are using the AXI4-Stream interface for pipelin
 this cannot be guaranteed, the synthesis will fail. To address this issue, we provide a Simulink block called frame_buffer. This block is available in our custom library [MoDesA_lib](matlab/MoDesA_lib.slx). Additional, to generate stimuli files for hardware verification the [MoDesA_lib](matlab/MoDesA_lib.slx) provides a write stimuli block, which can be inserted in the model.
 
 ### Prerequisites
+* C/C++ Compiler like GCC on Linux or MSVC on Windows
 * [CMake](https://cmake.org/) - Used to configure and create projects 
 * [MATLAB/Simulink](https://mathworks.com/products/simulink.html) - Used for simulation and code generation
 * [Xilinx Vivado HLS](https://www.xilinx.com/products/design-tools/vivado/integration/esl-design.html) - Used for High-Level Synthesis C/C++ -> HDL
 * [Xilinx Vivado](https://www.xilinx.com/products/design-tools/vivado.html) - Used for HDL simulation and bitstream generation HDL -> FPGA
 
 ## Running the [test_model_hw_only](models/test_model/test_model_hw_only.slx) test
-Before running the test, make sure all models in the [test_model](models/test_model) folder are exported/saved to your installed MATLAB version. (The provided test models were created from our side with MATLAB/Simulink R2017.a)
-Next, make sure MATLAB and Vivado/Vivado HLS is set in your environment variables and can be accessed from the command line.
+Before running the test, make sure all models in the [test_model](models/test_model) folder are exported/saved to your installed MATLAB version. 
+If your current version is newer than R2017.a (the provided test models were created from our side with MATLAB/Simulink R2017.a) you can just save the model with your installed version and delete the old .R2017a backup model file.
+If your current version is older than R2017.a send us a mail and we will export the test models to your version.
+
+Next, make sure MATLAB and Vivado/Vivado HLS is set in your environment PATH variable and can be accessed from the command line.
 
 ### On Unix/Linux
 Open a terminal and run:
 ```bash
 # navigate to your MoDesA folder
-cd ~/MoDesA 
+cd ~/Desktop/MoDesA 
 # create a build folder and enter
 mkdir build && cd build
-# Configure Project
+# configure project and start MATLAB code generation
 cmake ..
+```
+
+** Terminal Output **
+![Terminal output](img/linux_cmake_codegen.gif)
+
+If code generation was successful you can generate IP blocks from the model by running:
+```bash
 # Create IP Blocks
 make all
+```
+
+** Terminal Output **
+![Terminal output](img/linux_make_all_codegen.gif)
+
+If IP block generation was successful you can generate the Vivado project by running:
+```bash
 # Create Vivado Project
 make Vivado_test_model_hw_only
 ```
 ** Terminal Output **
-![Terminal output](img/linux_output_hw_only.gif)
+![Terminal output](img/linux_make_vivado_codegen.gif)
+
 
 ### On Windows
+MATLAB runs on Windows not within the command line. Therefore the code generation process needs on Windows two steps.
+First, the [CMakeLists](CMakeLists.txt) file needs the option `matlab` `on` and `synthesis` `off`.
+After CMake configuration with this setting is done the user needs to switch the `matlab` option to `off` and the  `synthesis` option to `on`.
+Now the user can generate the project files and open the project from CMake.
+In Microsoft Visual Studio the user needs to create ALL_BUILD to generate the IP Blocks. If generation was successful, he can create the Vivado_test_model_hw_only project.
 
-** GUI Steps **
+** GUI Steps on Windows **
 <video width="320" height="240" controls> <source src="img/windows_output_hw_only.mp4" type="video/mp4">Your browser does not support the video tag.</video> 
 
 In Vivado a block design will be generated, which looks like the following:
-<figure><img src="img/hw_only_block_design.png" alt="Test model hw_only objectives" width="50%" height="50%"></figure>
+<figure><img src="img/hw_only_block_design.png" alt="Test model hw_only objectives" class="center" width="80%" height="80%"></figure>
 In your build folder you should find a report called *hw_objectives.html* with the estimated hardware resources and latency constraints derived by HLS for every block in the model.
-<figure><img src="img/hw_only_hw_objectives.png" alt="Test model hw_only block design" width="50%" height="50%"></figure>
+<figure><img src="img/hw_only_hw_objectives.png" alt="Test model hw_only block design" class="center" width="80%" height="80%"></figure>
 For a bit and cycle accurate simulation of the model start first a synthesis by clicking Run Synthesis in Vivado.
 If synthesis is complete, you can click Run Simulation -> Run Post-Synthesis Functional Simulation.
 Vivado will use the automatically generated testbench and stimuli files for simulation. The Simulation will display the expected result.
-<figure><img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" width="50%" height="50%"></figure>
+<figure><img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" class="center" width="80%" height="80%"></figure>
   
 ## Authors
 See the [AUTHORS](AUTHORS) file for details
 
 ## ToDo
-  * Add option for Chip softcore processor generation per Simulink block.
+  * Add option for Chip softcore processor generation.
 
 ## License
 

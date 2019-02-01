@@ -32,8 +32,8 @@ function(topmodule synthesis matlab profiling model_name model_path device clk s
   set(CMAKE_CXX_COMPILER g++)  
 
   message(STATUS "Host platform is: " ${CMAKE_SYSTEM}) 
-  message(STATUS "Synthesis is: " ${synthesis})              
   message(STATUS "Matlab code generation is: " ${matlab})           
+  message(STATUS "Synthesis is: " ${synthesis})              
 
   include(createHardwareIPB)   
   include(createChipsIPB)   
@@ -50,13 +50,14 @@ function(topmodule synthesis matlab profiling model_name model_path device clk s
       execute_process(COMMAND matlab -nodesktop -nojvm -nosplash -logfile matlab_codegen.log -r "cd('../matlab/'),try, modesa_codegen('${model_name}','${model_path}','${profiling}'); catch e, warning('MATLAB %s', e.message), quit, end, quit") 
     endif(UNIX)
     if(WIN32)
-      execute_process(COMMAND matlab -nodesktop -nojvm -nosplash -logfile matlab_codegen.log -r "cd('..\matlab\'),try, modesa_codegen('${model_name}','${model_path}','${profiling}'); catch e, warning('MATLAB %s', e.message), quit, end, quit") 
+      execute_process(COMMAND matlab -nodesktop -nojvm -nosplash -logfile matlab_codegen.log -r "cd('../matlab/'),try, modesa_codegen('${model_name}','${model_path}','${profiling}'); catch e, warning('MATLAB %s', e.message), quit, end, quit" WORKING_DIRECTORY ${CMAKE_BINARY_DIR}) 
     endif(WIN32)
-    # copy generated matlab files
-    copyGenFiles(ipb_folders chip_folders ${model_name})
   endif()
 
   if(synthesis)
+    # copy generated matlab files
+    copyGenFiles(ipb_folders chip_folders ${model_name})
+
     message(STATUS "XILINX_VIVADO: $ENV{XILINX_VIVADO}")
     message(STATUS "XILINX_VIVADO_HLS: $ENV{XILINX_VIVADO_HLS}")
     message(STATUS "start defining IP-CORES from model ${model_name}")
