@@ -1,9 +1,10 @@
 # MoDesA
-MoDesA is an automated systematic design flow that couples model-based design and simulation with Xilinx Vivado High-Level-Synthesis (HLS) for hybrid hardware and software implementations which was presented on the ReConFig18 conference. 
-The design flow makes use of the modeling and simulation environment MATLAB/Simulink. 
-MoDesA is used for designing, simulating, prototyping, and testing hybrid hardware/software solutions for Xilinx Zynq PSoC architectures. 
-Based on a tagging scheme, a manual partitioning of Simulink blocks is possible. 
-Thereby, the proposed methodology allows to automatically explore different hardware and software implementation variants from a behavioral Simulink model. 
+MoDesA is an automated systematic design flow that couples model-based design and simulation with Xilinx Vivado High-Level-Synthesis (HLS) for hybrid hardware and software implementations and was presented on the ReConFig18 conference. 
+It makes use of the modeling and simulation environment MATLAB/Simulink. 
+MoDesA is used for designing, simulating, prototyping, and testing hardware/software solutions for Xilinx Zynq PSoC architectures. 
+
+Based on a tagging scheme, a manual partitioning of Simulink blocks onto resources is possible. 
+Thereby, the proposed methodology allows to automatically explore different hardware and software implementation variants from a single behavioral Simulink model. 
 The tool flow presents itself as a very powerful and user-friendly design tool for improving productivity. 
 A more detailed description can be found in the paper [Model-Based Design Automation of Hardware/Software Co-Designs for Xilinx Zynq PSoCs](https://www.researchgate.net/publication/330728498_Model-Based_Design_Automation_of_HardwareSoftware_Co-Designs_for_Xilinx_Zynq_PSoCs)
 
@@ -20,7 +21,7 @@ The blocks can be tagged by right click on the block -> Properties... and then e
 </p>
 
 Blocks with no tagging are ignored for code generation, which can be used for data sink or/and data source blocks.
-For hardware/software tagged Simulink models MoDesA will generate a Hardware/Software Co-Design like the one from [test_model_hw_sw_hw_sw](models/test_model/test_model_hw_sw_hw_sw.slx) with the Zynq and corresponding read and write adapters.
+For hardware/software tagged Simulink models, MoDesA will generate a Hardware/Software Co-Design like the one from [test_model_hw_sw_hw_sw](models/test_model/test_model_hw_sw_hw_sw.slx) with the Zynq and corresponding read and write adapters.
 
 <p align="center">
 <img src="img/hwsw_block_design.png" alt="Test model hw sw hw sw" class="center" width="100%" height="100%"/>
@@ -39,8 +40,10 @@ In the [CMakeLists.txt](CMakeLists.txt) file the user specifies the following pa
 `clk`       |  target clock speed in ns e.g., `10`
 `syn_opt`   |  `fast` or `accurate` Vivado HLS synthesis option
 
-The generated hardware IP blocks are using the AXI4-Stream interface for pipelined data streaming, which only supports sequential data access. Unfortunately, not all blocks within the Simulink library comply with these access patterns, and if
-this cannot be guaranteed, the synthesis will fail. To address this issue, we provide a Simulink block called frame_buffer. This block is available in our custom library [MoDesA_lib](matlab/MoDesA_lib.slx). Additional, to generate stimuli files for hardware verification the [MoDesA_lib](matlab/MoDesA_lib.slx) provides a write stimuli block, which can be inserted in the model.
+The generated hardware IP blocks are using the AXI4-Stream interface for pipelined data streaming, which only supports sequential data access. 
+Unfortunately, not all blocks within the Simulink library comply with these access patterns, and if this cannot be guaranteed, the synthesis will fail. 
+To address this issue, we provide a Simulink block called frame_buffer. 
+This block is available in our custom library [MoDesA_lib](matlab/MoDesA_lib.slx). In addition, to generate stimuli files for hardware verification the [MoDesA_lib](matlab/MoDesA_lib.slx) provides a write stimuli block, which can be inserted in the model.
 
 ### Prerequisites
 * C/C++ Compiler like GCC on Linux or MSVC on Windows
@@ -67,8 +70,6 @@ mkdir build && cd build
 cmake ..
 ```
 
-** Terminal Output **
-
 ![Terminal output](img/linux_cmake_codegen.gif)
 
 If code generation was successful, you can generate IP blocks from the model by running:
@@ -77,8 +78,6 @@ If code generation was successful, you can generate IP blocks from the model by 
 make all
 ```
 
-** Terminal Output **
-
 ![Terminal output](img/linux_make_all_codegen.gif)
 
 If IP block generation was successful, you can generate the Vivado project by running:
@@ -86,7 +85,6 @@ If IP block generation was successful, you can generate the Vivado project by ru
 # Create Vivado Project
 make Vivado_test_model_hw_only
 ```
-** Terminal Output **
 
 ![Terminal output](img/linux_make_vivado_codegen.gif)
 
