@@ -96,7 +96,7 @@ After CMake configuration with this setting is done the user needs to switch the
 Now the user can generate the project files and open the project from CMake.
 In Microsoft Visual Studio the user needs to create ALL_BUILD to generate the IP Blocks. If generation was successful, the user can create the Vivado_test_model_hw_only project.
 
-> Video GUI Steps on Windows
+> Click Video: GUI Steps on Windows
 [![Watch the video](img/video_img.png)](https://youtu.be/3QI5QKn2B-8)
 
 In Vivado a block design will be generated, which looks like the following:
@@ -115,11 +115,12 @@ Vivado will use the automatically generated testbench and stimuli files for simu
 </p>
   
 ## Authors
-See the [AUTHORS](AUTHORS) file for details
+See the [AUTHORS](AUTHORS) file for details.
 
 ## ToDo
-  * Add option for Chip softcore processor generation.
+  * Add option for Chip soft-core processor generation.
+  * Integrate SW profiling option on Windows and Linux.
 
 ## License
 
-This project is licensed under the Apache License, Version 2.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the Apache License, Version 2.0 - see the [LICENSE.md](LICENSE.md) file for details.

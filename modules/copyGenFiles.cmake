@@ -83,9 +83,9 @@ function(copyGenFiles ipb_folders chip_folders model)
   endif()
   
   # If stimuli folder was generated copy it to build folder
-  if(EXISTS "${matlab_dir}/profile")
-    message(STATUS "found and copied profile data")
-    file(RENAME ${matlab_dir}/profile ${CMAKE_BINARY_DIR}/profile)
+  if(EXISTS "${matlab_dir}/profiling")
+    message(STATUS "found and copied profiling data")
+    file(RENAME ${matlab_dir}/profiling ${CMAKE_BINARY_DIR}/profiling)
   endif()
 
   # If application graph was generated copy it to build folder

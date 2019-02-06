@@ -17,11 +17,13 @@
 %   limitations under the License.
 % -------------------------------------------------------------------------  
 % 
-%  @author  Streit Franz-Josef, Martin Letras
+%  @author  Streit Franz-Josef
+%  @mail    franz-josef.streit@fau.de                                                   
 %  @date    09 November 2017
 %  @version 0.1
 %  @brief   Here you can define your build model parameters, for HW IP-Block
-%           generation
+%           generation. Changing this parameters has influence on code generation
+%           synthesis.
 %
 %% 
 
@@ -70,21 +72,23 @@ function hw_optimizer(model_name)
    set_param(cs,'MemcpyThreshold','2147483647'); % highest possible value avoids also memcpy for int values
    set_param(cs,'ZeroInternalMemoryAtStartup', 'off'); % removes memset in initialization
    set_param(cs,'SuppressErrorStatus', 'on'); % omits the error status field from the generated real-time model data structure rtModel. This option reduces memory usage.
-   set_param(cs,'OptimizeBlockIOStorage','off'); % !!! This is an important setting (on) for BRAM reduction. However also to fixe both data write access (off)
-   set_param(cs,'GlobalVariableUsage','Minimize global data access'); % Minimize use of global variables by using local variables to hold intermediate values.
    set_param(cs,'GlobalDataDefinition','InSourceFile'); % specify where to place definitions of global variables.
    set_param(cs,'GlobalDataReference','InSourceFile'); % specify where extern, typedef, and #define statements are to be declared.
+   set_param(cs,'MaxStackSize','inf'); %If you specify the maximum stack to be inf, then the generated code contains the least number of global variables.
+   set_param(cs,'GlobalVariableUsage','Minimize global data access'); % Minimize use of global variables by using local variables to hold intermediate values.
    set_param(cs,'GlobalBufferReuse','off');
-   set_param(cs,'BufferReuse','off');
-   %set_param(cs,'DifferentSizesBufferReuse','on');
+   set_param(cs,'OptimizeBlockIOStorage','on'); %'on' Simulink software reuses memory buffers allocated to store block input and output signals, reducing the memory requirements. 
+   set_param(cs,'LocalBlockOutputs','on'); %Specify whether block signals are declared locally or globally
+   set_param(cs,'BufferReuse','off'); %Specify whether Simulink® Coder™ software reuses signal memory.
    set_param(cs,'OptimizeDataStoreBuffers','off');
    set_param(cs,'ExpressionFolding','on'); % enables block computations into single expressions wherever possible.
    set_param(cs,'StrengthReduction','on'); % replace multiply operations in the array index with a temporary variable
    set_param(cs,'SimCompilerOptimization','off'); % sets the degree of optimization used by the compiler when generating code for acceleration.
-   set_param(cs,'OptimizeBlockOrder','speed'); % reorder block operations in the generated code for improved code execution 'speed'.
-   set_param(cs,'RollThreshold', 7);   % loop unrolling threshold
+   set_param(cs,'OptimizeBlockOrder','off'); % reorder block operations in the generated code for improved code execution 'speed'.
+   set_param(cs,'RollThreshold', '10');   % loop unrolling threshold
    set_param(cs,'CompileTimeRecursionLimit', '100'); % prevent run-time recursion
    set_param(cs,'EnableRuntimeRecursion','off'); % Disables run-time recursion for code generation. If run-time recursion is disabled, and the MATLAB code requires run-time recursion, code generation fails.
+   set_param(cs,'RTWCompilerOptimization', 'off'); % on (faster runs) and off (faster builds)
    save_system(model_name);
    rtwbuild(model_name);
-end
+  end

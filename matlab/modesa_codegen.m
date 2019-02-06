@@ -24,7 +24,7 @@
 %  @brief   main function that performs the execution of the code generation
 %  @param   mdl_name = name of the model
 %  @param   mdl_path = path to the model
-%  @param   profiling = generates an application graph and SW profiles the model
+%  @param   profiling = generates an application graph and sw profiles the model
 %
 % example: modesa_codegen('test_model', 'path_to_test_model')
 % Remember: Block in HW      --> Tag 'hw_ip'
@@ -77,6 +77,8 @@ try
             set_param(mdl_name, 'StopTime', 'Inf');
             mkdir('stimuli');
             sim(mdl_name);
+            % close library
+            close_system('MoDesA_lib');
         end
         ports = get_param(writeStim_blks{k},'PortHandles');
         srcSignal = get_param(ports.Inport,'Line');

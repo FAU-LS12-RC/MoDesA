@@ -239,9 +239,15 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
             if {[llength read_adapter] > 0} {
               if {$adapter_cnt >0} {
                 set_property -dict [list CONFIG.NUM_MI [expr [get_property CONFIG.NUM_MI [get_bd_cells axi_interconnect_0]] + 1]] [get_bd_cells axi_interconnect_0]
-                connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ACLK]
-                connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ARESETN]
                 set_property -dict [list CONFIG.NUM_SI [expr [get_property CONFIG.NUM_SI [get_bd_cells smartconnect_0]] + 1]] [get_bd_cells smartconnect_0]
+                # check if we have less then 10 Master ports
+                if {[expr ${adapter_cnt}*2 < 10]} {
+                  connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ACLK]
+                  connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ARESETN]
+                } else {
+                  connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2]_ACLK]
+                  connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2]_ARESETN]
+                }
               }
               # generate read adapter to read from memory
               puts "create read_adapter [lindex $read_adapter $read_cnt]"   
@@ -258,11 +264,18 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
               connect_bd_net [get_bd_pins reg_[lindex $read_adapter $read_cnt]/s00_axi_aresetn] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]
               connect_bd_intf_net [get_bd_intf_pins dma_[lindex $read_adapter $read_cnt]/M_AXIS_MM2S] [get_bd_intf_pins reg_[lindex $read_adapter $read_cnt]/from_dma]
               connect_bd_intf_net [get_bd_intf_pins dma_[lindex $read_adapter $read_cnt]/M_AXI_MM2S] [get_bd_intf_pins smartconnect_0/S0[expr ${adapter_cnt}]_AXI]
-              connect_bd_intf_net [get_bd_intf_pins dma_[lindex $read_adapter $read_cnt]/S_AXI_LITE] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_AXI]
               set_property -dict [list CONFIG.NUM_MI [expr [get_property CONFIG.NUM_MI [get_bd_cells axi_interconnect_0]] + 1]] [get_bd_cells axi_interconnect_0]
-              connect_bd_intf_net [get_bd_intf_pins reg_[lindex $read_adapter $read_cnt]/S00_AXI_read_adapter] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_AXI]
-              connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ACLK]
-              connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ARESETN]
+              if {[expr ${adapter_cnt}*2 < 10]} {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $read_adapter $read_cnt]/S_AXI_LITE] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_AXI]
+                connect_bd_intf_net [get_bd_intf_pins reg_[lindex $read_adapter $read_cnt]/S00_AXI_read_adapter] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_AXI]
+                connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ACLK]
+                connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ARESETN]
+              } else {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $read_adapter $read_cnt]/S_AXI_LITE] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M[expr ${adapter_cnt}*2]_AXI]
+                connect_bd_intf_net [get_bd_intf_pins reg_[lindex $read_adapter $read_cnt]/S00_AXI_read_adapter] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_AXI]
+                connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ACLK]
+                connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ARESETN]
+              }
               group_bd_cells [lindex $read_adapter $read_cnt] [get_bd_cells reg_[lindex $read_adapter $read_cnt]] [get_bd_cells dma_[lindex $read_adapter $read_cnt]]
               incr read_cnt
               incr adapter_cnt
@@ -274,9 +287,15 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
             if {[llength write_adapter] > 0} {
               if {$adapter_cnt >0} {
                 set_property -dict [list CONFIG.NUM_MI [expr [get_property CONFIG.NUM_MI [get_bd_cells axi_interconnect_0]] + 1]] [get_bd_cells axi_interconnect_0]
-                connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ACLK]
-                connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ARESETN]
                 set_property -dict [list CONFIG.NUM_SI [expr [get_property CONFIG.NUM_SI [get_bd_cells smartconnect_0]] + 1]] [get_bd_cells smartconnect_0]
+                # check if we have less then 10 Master ports
+                if {[expr ${adapter_cnt}*2 < 10]} {
+                  connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ACLK]
+                  connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_ARESETN]
+                } else {
+                  connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2]_ACLK]
+                  connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2]_ARESETN]
+                } 
               }
               # generate write adapter to write to memory
               puts "create write_adapter [lindex $write_adapter $write_cnt]"    
@@ -293,11 +312,18 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
               connect_bd_net [get_bd_pins reg_[lindex $write_adapter $write_cnt]/s00_axi_aresetn] [get_bd_pins proc_sys_reset_0/peripheral_aresetn]
               connect_bd_intf_net [get_bd_intf_pins dma_[lindex $write_adapter $write_cnt]/S_AXIS_S2MM] [get_bd_intf_pins reg_[lindex $write_adapter $write_cnt]/to_dma] 
               connect_bd_intf_net [get_bd_intf_pins dma_[lindex $write_adapter $write_cnt]/M_AXI_S2MM] [get_bd_intf_pins smartconnect_0/S0[expr ${adapter_cnt}]_AXI]
-              connect_bd_intf_net [get_bd_intf_pins dma_[lindex $write_adapter $write_cnt]/S_AXI_LITE] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_AXI]
               set_property -dict [list CONFIG.NUM_MI [expr [get_property CONFIG.NUM_MI [get_bd_cells axi_interconnect_0]] + 1]] [get_bd_cells axi_interconnect_0]
-              connect_bd_intf_net [get_bd_intf_pins reg_[lindex $write_adapter $write_cnt]/S00_AXI_write_adapter] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_AXI]
-              connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ACLK]
-              connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ARESETN]
+              if {[expr ${adapter_cnt}*2 < 10]} {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $write_adapter $write_cnt]/S_AXI_LITE] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2]_AXI]
+                connect_bd_intf_net [get_bd_intf_pins reg_[lindex $write_adapter $write_cnt]/S00_AXI_write_adapter] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_AXI]
+                connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ACLK]
+                connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M0[expr ${adapter_cnt}*2+1]_ARESETN]
+              } else {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $write_adapter $write_cnt]/S_AXI_LITE] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M[expr ${adapter_cnt}*2]_AXI]
+                connect_bd_intf_net [get_bd_intf_pins reg_[lindex $write_adapter $write_cnt]/S00_AXI_write_adapter] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_AXI]
+                connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ACLK]
+                connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ARESETN]
+              }
               group_bd_cells [lindex $write_adapter $write_cnt] [get_bd_cells dma_[lindex $write_adapter $write_cnt]] [get_bd_cells reg_[lindex $write_adapter $write_cnt]]
               incr write_cnt
               incr adapter_cnt
