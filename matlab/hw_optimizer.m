@@ -1,4 +1,4 @@
-%% 
+% 
 % -------------------------------------------------------------------------  
 %   Copyright (c) 2017 Hardware-Software-Co-Design, Friedrich-
 %   Alexander-Universitaet Erlangen-Nuernberg (FAU), Germany.
@@ -48,7 +48,8 @@ function hw_optimizer(model_name)
    set_param(cs,'EfficientFloat2IntCast', 'on');   % Remove code from floating-point to integer conversions that wraps out-of-range values
    set_param(cs,'NoFixptDivByZeroProtection', 'on'); %Specify whether to generate code that guards against division by zero 
    set_param(cs,'ProdEqTarget', 'on');   % Test hardware is the same as production hardware
-    
+   
+   set_param(cs,'CodeReplacementLibrary', 'MoDesA replacement lib');% use MoDesA code replacement library
    set_param(cs,'MaxIdLength',200);
    set_param(cs,'Solver','FixedStepDiscrete');
    set_param(cs,'LaunchReport','off');
@@ -67,10 +68,11 @@ function hw_optimizer(model_name)
    set_param(cs,'SupportContinuousTime','off');
    set_param(cs,'DefaultUnderspecifiedDataType','single');
    set_param(cs,'DefaultParameterBehavior','Inlined'); % transform numeric block parameters into constant inlined values in the generated code.
-   set_param(cs,'InitFltsAndDblsToZero','off');
    set_param(cs,'EnableMemcpy','on');
    set_param(cs,'MemcpyThreshold','2147483647'); % highest possible value avoids also memcpy for int values
-   set_param(cs,'ZeroInternalMemoryAtStartup', 'off'); % removes memset in initialization
+   set_param(cs,'InitFltsAndDblsToZero','off');
+   set_param(cs,'ZeroInternalMemoryAtStartup', 'on'); %initializes internal data to zero important to break algebraic loops
+   set_param(cs,'ZeroExternalMemoryAtStartup', 'off'); %
    set_param(cs,'SuppressErrorStatus', 'on'); % omits the error status field from the generated real-time model data structure rtModel. This option reduces memory usage.
    set_param(cs,'GlobalDataDefinition','InSourceFile'); % specify where to place definitions of global variables.
    set_param(cs,'GlobalDataReference','InSourceFile'); % specify where extern, typedef, and #define statements are to be declared.

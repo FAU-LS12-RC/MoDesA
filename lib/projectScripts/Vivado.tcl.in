@@ -173,7 +173,12 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
       connect_bd_intf_net [get_bd_intf_pins processing_system7_0/M_AXI_GP0] -boundary_type upper [get_bd_intf_pins axi_interconnect_0/S00_AXI]
       # connect HP0 bus to multiplexer
       connect_bd_intf_net [get_bd_intf_pins smartconnect_0/M00_AXI] [get_bd_intf_pins processing_system7_0/S_AXI_HP0]
-     } else {
+      # create external clk and reset to avoid critical warnings with external axi stream interfaces
+      create_bd_port -dir O -type clk ACLK
+      connect_bd_net [get_bd_pins /processing_system7_0/FCLK_CLK0] [get_bd_ports ACLK]
+      create_bd_port -dir O -type rst ARESETN
+      connect_bd_net [get_bd_pins /processing_system7_0/FCLK_RESET0_N] [get_bd_ports ARESETN]
+      } else {
       # create clock port
       create_bd_port -dir I -type clk clk
       set clockport [get_bd_ports clk]
@@ -282,7 +287,11 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
             }
          } elseif {$src_block == "extern"} {
               puts "Make ${sink_block} external"  
-              make_bd_intf_pins_external [get_bd_intf_pins ${sink_block}]			  
+              make_bd_intf_pins_external [get_bd_intf_pins ${sink_block}]
+              set intf_sink_block [get_bd_intf_ports -filter {NAME =~ "*outputArg*" || NAME =~ "*inputArg*"}]
+              foreach port_sink_block $intf_sink_block {
+                set_property CONFIG.ASSOCIATED_BUSIF [string trimleft $port_sink_block "/"] [get_bd_ports /ACLK]
+            }
          } elseif {$sink_block == "sw"} {
             if {[llength write_adapter] > 0} {
               if {$adapter_cnt >0} {
@@ -331,7 +340,11 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
          } elseif {$sink_block == "extern"} {
               puts "Make ${src_block} external"  
               make_bd_intf_pins_external [get_bd_intf_pins ${src_block}]
-         } else {
+              set intf_src_block [get_bd_intf_port -filter {NAME =~ "*outputArg*" || NAME =~ "*inputArg*"}]
+              foreach port_src_block $intf_src_block {
+                set_property CONFIG.ASSOCIATED_BUSIF [string trimleft $port_src_block "/"] [get_bd_ports /ACLK]
+            }
+        } else {
             puts "Connect ${src_block} with ${sink_block}"  
             connect_bd_intf_net [get_bd_intf_pins ${src_block}] [get_bd_intf_pins ${sink_block}]  
          }
@@ -358,9 +371,8 @@ tclapp::xilinx::designutils::write_ip_integrator_testbench -addToProject -output
 }
 
 source $tb_lib_dir/createTB.tcl
-add_files -fileset sim_1 -norecurse "$proj_dir/$PROJNAME.sim/test_design_1.vhd"
+#add_files -fileset sim_1 -norecurse "$proj_dir/$PROJNAME.sim/test_design_1.vhd"
 set_property top test_design_1 [get_filesets sim_1]
-source $tb_lib_dir/updateTBports.tcl
 # save block design
 save_bd_design design_1
 

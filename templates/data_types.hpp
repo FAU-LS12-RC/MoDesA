@@ -42,6 +42,12 @@
 #include <limits.h>
 typedef __SIZE_TYPE__ size_t;
 
+// modesa dummy memset function
+void* dummy_memset(void *b, int c, int len) 
+{
+  return 0;
+}
+
 /*=======================================================================*
  * Fixed width word size data types:                                     *
  *   int8_T, int16_T, int32_T     - signed 8, 16, or 32 bit integers     *

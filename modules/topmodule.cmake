@@ -50,7 +50,14 @@ function(topmodule synthesis matlab profiling model_name model_path device clk s
       execute_process(COMMAND matlab -nodesktop -nojvm -nosplash -logfile matlab_codegen.log -r "cd('../matlab/'),try, modesa_codegen('${model_name}','${model_path}','${profiling}'); catch e, warning('MATLAB %s', e.message), quit, end, quit") 
     endif(UNIX)
     if(WIN32)
-      execute_process(COMMAND matlab -nodesktop -nojvm -nosplash -logfile matlab_codegen.log -r "cd('../matlab/'),try, modesa_codegen('${model_name}','${model_path}','${profiling}'); catch e, warning('MATLAB %s', e.message), quit, end, quit" WORKING_DIRECTORY ${CMAKE_BINARY_DIR}) 
+      execute_process(COMMAND cmd /c "${CMAKE_CURRENT_SOURCE_DIR}/run_modesa.bat" ${model_name} ${model_path} ${profiling}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        RESULT_VARIABLE error
+        ERROR_VARIABLE error_output
+        )
+      if(error)
+        message(FATAL_ERROR ${error_output})
+      endif()
     endif(WIN32)
   endif()
 

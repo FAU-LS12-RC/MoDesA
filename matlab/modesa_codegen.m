@@ -42,8 +42,13 @@ warning('off', 'MATLAB:printf:BadEscapeSequenceInFormat');
 % here we clean up at the beginning if legacy code exists
 % if an old model with this name is loaded close it
 if bdIsLoaded(mdl_name)
-    close_system(mdl_name,1);
+    close_system(mdl_name,0);
 end
+% with this command we register the MoDesA code replacement library
+sl_refresh_customizations
+ 
+% add path for MoDesA_lib.slx to matlab search path 
+addpath('lib','-end');
 
 % if an old folder with this name exists remove it
 if exist(mdl_name,'dir') == 7
@@ -120,11 +125,11 @@ catch e
     close_system;
     folders = dir();
     for j=1:length(folders)
-        if folders(j).isdir && (~strcmp(folders(j).name,'.') && ~strcmp(folders(j).name,'..'))
+        if folders(j).isdir && (~strcmp(folders(j).name,'.') && ~strcmp(folders(j).name,'..') && ~strcmp(folders(j).name,'lib'))
             rmdir(folders(j).name, 's');
         end
     end
-    delete([mdl_name '*.slx*']);
+    delete('*.slx*');
     %if exist('rtwmakecfg','file') == 2
     %    delete('rtwmakecfg.m');
     %end
@@ -184,13 +189,12 @@ if ~isempty(islands_in_model)
         close_system;
         folders = dir();
         for j=1:length(folders)
-            if folders(j).isdir && (~strcmp(folders(j).name,'.') && ~strcmp(folders(j).name,'..'))
+            if folders(j).isdir && (~strcmp(folders(j).name,'.') && ~strcmp(folders(j).name,'..') && ~strcmp(folders(j).name,'lib'))
                 rmdir(folders(j).name,'s');
             end
         end
-        delete([mdl_name '*.slx*']);
         
-        delete *.mex* *.ppm *.c *.mat *.tlc *.jpg;
+        delete *.slx* *.mex* *.ppm *.c *.mat *.tlc *.jpg;
         if exist('dfg_hw.txt','file') == 2
             delete('dfg_hw.txt');
         end
@@ -211,7 +215,6 @@ fprintf('\nMoDesA: "code generation completed successfully."\n');
 bdclose(obj.mdl_name_trimmed); %close current system without saving
 
 % here we clean up
-delete([mdl_name '*.slx*']);
 clear all; %clear all persistent variables
-delete *.mex* *.ppm *.c *.mat *.tlc;
+delete *.slx* *.mex* *.ppm *.c *.mat *.tlc;
 end

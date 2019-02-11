@@ -53,12 +53,13 @@ ports = get_param(blk_properties.hierarchy,'Ports');
     % here we reformat the header file
     while ~feof(fid_h_file)
         tline = fgetl(fid_h_file);
-        
+        tline = strrep( tline, '%', '%%' ); % change % to %% for right interpretation in fprintf
         % save definition of global vars and remove them
         if contains(tline, "extern")
             if (~contains(tline, ");")) && (~contains(tline, "(")) && (~contains(tline, "const"))
                 tline = strtrim(tline);
-                glob_vars = erase([tline '\n' glob_vars],"extern ");
+                tmp = eraseBetween(tline,"/*","*/",'Boundaries','inclusive'); %delete comments from global variables
+                glob_vars = erase([tmp '\n' glob_vars],"extern "); % and remove the extern keyword
                 continue;
             end
         end
