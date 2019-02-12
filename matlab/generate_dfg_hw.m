@@ -61,8 +61,8 @@ if ~isempty(outport_line)
         tag_dst_blk = get_param(dstport_properties.Parent,'Tag');
         if contains(tag_dst_blk,'sw')  % check if we are connected to a sw block
             fprintf(fid_dfg,['%s_hw/outputArg' num2str(j) '->sw\n'],blk_properties.name);
-            fprintf(fid_dfg,['out_port_dimension=[' num2str(get_scalar_port_dim(cell2mat(dimensions_outport(j,:)),1)) ']\n']); % write port dimensions for the tb generation
-            fprintf(fid_dfg,['out_port_byte_size=[' num2str(get_port_byte_size(char(data_types_outport(j,:)))) ']\n']); % write port byte size for the tb generation
+            %fprintf(fid_dfg,['out_port_dimension=[' num2str(get_scalar_port_dim(cell2mat(dimensions_outport(j,:)),1)) ']\n']); % write port dimensions for the tb generation
+            %fprintf(fid_dfg,['out_port_byte_size=[' num2str(get_port_byte_size(char(data_types_outport(j,:)))) ']\n']); % write port byte size for the tb generation
             fprintf(fid_dfg,'write_adapt\n');
         elseif contains(tag_dst_blk,'hw')                         % if not then our dst_blk is a hw block
             name_dst_blk = get_param(dstport_properties.Parent,'Name');
@@ -94,8 +94,8 @@ if ~isempty(inport_line)
         tag_src_blk = get_param(srcport_properties.Parent,'Tag');       % get tag of src_blk
         if contains(tag_src_blk,'sw')                               % check if our src_blk is a sw boundary
             fprintf(fid_dfg,['sw->' '%s_hw/inputArg' num2str(j) '\n'],blk_properties.name);
-            fprintf(fid_dfg,['in_port_dimension=[' num2str(get_scalar_port_dim(cell2mat(dimensions_inport(j,:)),1)) ']\n']); % write port dimension for tb generation
-            fprintf(fid_dfg,['in_port_byte_size=[' num2str(get_port_byte_size(char(data_types_inport(j,:)))) ']\n']); % write port byte size for the tb generation
+            %fprintf(fid_dfg,['in_port_dimension=[' num2str(get_scalar_port_dim(cell2mat(dimensions_inport(j,:)),1)) ']\n']); % write port dimension for tb generation
+            %fprintf(fid_dfg,['in_port_byte_size=[' num2str(get_port_byte_size(char(data_types_inport(j,:)))) ']\n']); % write port byte size for the tb generation
             fprintf(fid_dfg,'read_adapt\n');                             % add read adapter to DFG
         elseif isempty(tag_src_blk)                                     % if empty then it is a data_src
             fprintf(fid_dfg,['extern->' '%s_hw/inputArg' num2str(j) '\n'],blk_properties.name);

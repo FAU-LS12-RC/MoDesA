@@ -1,7 +1,7 @@
 # MoDesA
-MoDesA is an automated systematic design flow that couples model-based design and simulation with Xilinx Vivado High-Level-Synthesis (HLS) for hybrid hardware and software implementations and was presented on the ReConFig18 conference. 
+MoDesA is an automated systematic design flow that couples model-based design and simulation with Xilinx Vivado High-Level-Synthesis (HLS) for hybrid hardware and software implementations and was presented on the [ReConFig18](http://www.reconfig.org/) conference. 
 It makes use of the modeling and simulation environment MATLAB/Simulink. 
-MoDesA is used for designing, simulating, prototyping, and testing hardware/software solutions for Xilinx Zynq PSoC architectures. 
+MoDesA is used for designing, simulating, prototyping, and testing different hardware/software solutions for Xilinx Zynq Programmable System-on-Chip (PSoC) architectures. 
 
 Based on a tagging scheme, a manual partitioning of Simulink blocks onto resources is possible. 
 Thereby, the proposed methodology allows to automatically explore different hardware and software implementation variants from a single behavioral Simulink model. 
@@ -31,14 +31,14 @@ In the [CMakeLists.txt](CMakeLists.txt) file the user specifies the following pa
   
   Variable  | Meaning
 ------------|----------------------------------------------------
-`matlab`    | `on` or `off` use MATLAB code generation
-`synthesis` | `on` or `off` use Vivado HLS and Vivado
+`matlab`    | `on` or `off` use only MATLAB code generation
+`synthesis` | `on` or `off` use also Vivado HLS and Vivado
 `model_name`|  name of your Simulink model
 `model_path`|  path of your Simulink model within [models](models)
 `profiling` | `on` or `off` generates application graph from the model
 `device`    |  target Zynq device e.g., `xc7z020clg484-1` (ZedBoard)
 `clk`       |  target clock speed in ns e.g., `10`
-`syn_opt`   |  `fast` or `accurate` Vivado HLS synthesis option
+`syn_opt`   | `fast` or `accurate` Vivado HLS synthesis option
 
 The generated hardware IP blocks are using the AXI4-Stream interface for pipelined data streaming, which only supports sequential data access. 
 Unfortunately, not all blocks within the Simulink library comply with these access patterns, and if this cannot be guaranteed, the synthesis will fail. 
@@ -57,7 +57,7 @@ Before running the test, make sure all models in the [test_model](models/test_mo
 If your current version is newer than R2017.a, (the provided test models were created from our side with MATLAB/Simulink R2017.a) you can just save the model with your installed version and delete the old .R2017a backup model file.
 If your current version is older than R2017.a, send us a mail and we will export the test models to your version.
 
-Next, make sure MATLAB and Vivado/Vivado HLS is set in your environment PATH variable and can be accessed from the command line.
+Next, make sure MATLAB, Vivado and Vivado HLS is set in your environment PATH variable and can be accessed from the command line.
 
 ### On Unix/Linux
 Open a terminal and run:
@@ -90,11 +90,7 @@ make Vivado_test_model_hw_only
 
 
 ### On Windows
-MATLAB runs on Windows not within the command line. Therefore the code generation process needs on Windows two steps.
-First, the [CMakeLists](CMakeLists.txt) file needs the option `matlab` `on` and `synthesis` `off`.
-After CMake configuration with this setting is done the user needs to switch the `matlab` option to `off` and the  `synthesis` option to `on`.
-Now the user can generate the project files and open the project from CMake.
-In Microsoft Visual Studio the user needs to create ALL_BUILD to generate the IP Blocks. If generation was successful, the user can create the Vivado_test_model_hw_only project.
+All steps required for using MoDesA on Windows can be seen in the following video:
 
 > Click Video: GUI Steps on Windows
 [![Watch the video](img/video_img.png)](https://youtu.be/3QI5QKn2B-8)
@@ -113,7 +109,14 @@ Vivado will use the automatically generated testbench and stimuli files for simu
 <p align="center">
  <img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" class="center" width="100%" height="100%"\>
 </p>
-  
+
+## Currently Known Critical Simulink Blocks
+Block                            | Reason
+---------------------------------|----------------------------------------------------
+Memory                           | `on` or `off` use MATLAB code generation
+Unit Delay                       | `on` or `off` use Vivado HLS and Vivado
+Estimate Geometric Transformation|  name of your Simulink model
+
 ## Authors
 See the [AUTHORS](AUTHORS) file for details.
 

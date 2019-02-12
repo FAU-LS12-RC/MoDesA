@@ -55,9 +55,9 @@ set(synthesis "on")
 # model need to be in models folder
 #
 
-set(model_name "test_model_hw_only")
+#set(model_name "test_model_hw_only")
 #set(model_name "test_model_hw_sw")
-#set(model_name "test_model_hw_sw_hw_sw")
+set(model_name "test_model_hw_sw_hw_sw")
 #set(model_name "test_model_sw_hw")
 #set(model_name "test_model_sw_only")
 
