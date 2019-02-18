@@ -88,12 +88,11 @@ make Vivado_test_model_hw_only
 
 ![Terminal output](img/linux_make_vivado_codegen.gif)
 
-
 ### On Windows
 All steps required for using MoDesA on Windows can be seen in the following video:
 
 > Click Video: GUI Steps on Windows
-[![Watch the video](img/video_img.png)](https://youtu.be/3QI5QKn2B-8)
+[![Watch the video](img/video_img.png)](https://youtu.be/nHJpSuoAeVs)
 
 In Vivado a block design will be generated, which looks like the following:
 <p align="center">
@@ -110,12 +109,18 @@ Vivado will use the automatically generated testbench and stimuli files for simu
  <img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" class="center" width="100%" height="100%"\>
 </p>
 
-## Currently Known Critical Simulink Blocks
+## Currently known Simulink blocks that require special treatment 
 Block                            | Reason
----------------------------------|----------------------------------------------------
-Memory                           | `on` or `off` use MATLAB code generation
-Unit Delay                       | `on` or `off` use Vivado HLS and Vivado
-Estimate Geometric Transformation|  name of your Simulink model
+---------------------------------|------------------------------------------------------------
+Memory                           | Requires storage class for code generation as ExportedGlobal
+Unit Delay                       | Requires storage class for code generation as ExportedGlobal 
+Median                           | Requires Insertion sort as sort algorithm 
+
+## Currently known Simulink blocks that require manual adaption for HLS
+Block                            | Reason
+---------------------------------|------------------------------------------------------------
+Estimate Geometric Transformation| Uses rand() and srand() in generated code
+2D-IDCT				 | Uses recursion for 16x16 blocks
 
 ## Authors
 See the [AUTHORS](AUTHORS) file for details.
@@ -125,5 +130,4 @@ See the [AUTHORS](AUTHORS) file for details.
   * Integrate SW profiling option on Windows and Linux.
 
 ## License
-
 This project is licensed under the Apache License, Version 2.0 - see the [LICENSE.md](LICENSE.md) file for details.

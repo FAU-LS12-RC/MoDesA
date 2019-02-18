@@ -36,7 +36,7 @@ ports = get_param(blk_properties.hierarchy,'Ports');
 % variable declaration
     init = '';
     init_cnt = 0;
-    glob_vars = '';
+    glob_vars = {};
     ban = 0;
     is_init = 0;
     is_terminate = 0;
@@ -58,8 +58,8 @@ ports = get_param(blk_properties.hierarchy,'Ports');
         if contains(tline, "extern")
             if (~contains(tline, ");")) && (~contains(tline, "(")) && (~contains(tline, "const"))
                 tline = strtrim(tline);
-                tmp = eraseBetween(tline,"/*","*/",'Boundaries','inclusive'); %delete comments from global variables
-                glob_vars = erase([tmp '\n' glob_vars],"extern "); % and remove the extern keyword
+                tmp = extractBefore(tline,";"); %extract global variables
+                glob_vars{end+1} = erase([tmp ';\n'],"extern "); % and remove the extern keyword
                 continue;
             end
         end
@@ -118,8 +118,12 @@ ports = get_param(blk_properties.hierarchy,'Ports');
             tline = strrep(tline,'.h','_hw.hpp');
         end
         
-        if contains(glob_vars, strtrim(tline))
-            continue;
+        % here we ignore all global variables within the c file to allow
+        % the DATAFLOW pragma
+        if (any(contains(glob_vars, eraseBetween(strtrim(tline),";","*/",'Boundaries','inclusive'))))
+           if  (strtrim(tline) ~= "")
+                continue;
+           end
         end
         % check if we are in terminate function
         if contains(tline,['void ' blk_properties.name '_terminate'])
@@ -195,7 +199,7 @@ ports = get_param(blk_properties.hierarchy,'Ports');
             % add HLS pragmas, here we specify the interfaces of the
             % vivado hls top function, adapt this according to your interface requirements
             % print here all global variables to support dataflow pragma
-            fprintf(fid_cpp_file,['\n' glob_vars '\n']);
+            fprintf(fid_cpp_file,['\n' cell2mat(glob_vars) '\n']);
             fprintf(fid_cpp_file,'static bool init=false;\n\n');
             fprintf(fid_cpp_file,'#pragma HLS reset variable=init\n');
             fprintf(fid_cpp_file,'#pragma HLS inline region recursive\n');

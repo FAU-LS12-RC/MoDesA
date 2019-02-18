@@ -67,6 +67,7 @@ if ~isempty(outport_line)
         elseif contains(tag_dst_blk,'hw')                         % if not then our dst_blk is a hw block
             name_dst_blk = get_param(dstport_properties.Parent,'Name');
             dst_blk_id   = sscanf(Simulink.ID.getSID([model '/' name_dst_blk]), [model ':%d']);  % get dst blk id
+            name_dst_blk = strrep(strrep(strrep(strrep(name_dst_blk, '/', '_'),' ','_'),'-','_'),newline,'_'); % remove white spaces
             fprintf(fid_dfg,['%s_hw/outputArg' num2str(j) '->%s_%d_hw/inputArg' num2str(dstport_properties.PortNumber) '\n'],blk_properties.name,lower(name_dst_blk),dst_blk_id);
         else                                                       % otherwise we need external outputs
             fprintf(fid_dfg,['%s_hw/outputArg' num2str(j) '->extern\n'],blk_properties.name);
@@ -109,10 +110,11 @@ if ~isempty(inport_line)
         set_param([blk_properties.name '/In' int2str(j)], 'PortDimensions', tmp_dim);
         % correct the datatype if datatype is a fixed point variable
         if strfind(data_types_inport(j,:),'fix') >= 1
-            data_types_inport(j,:) = correct_fixed_point_format(data_types_inport(j,:));
+            fixpoint_type = correct_fixed_point_format(data_types_inport(j,:));
+            set_param([blk_properties.name '/In' int2str(j)], 'OutDataTypeStr', fixpoint_type);
+        else
+            set_param([blk_properties.name '/In' int2str(j)], 'OutDataTypeStr', data_types_inport(j,:));
         end
-        
-        set_param([blk_properties.name '/In' int2str(j)], 'OutDataTypeStr', data_types_inport(j,:));
         if complex_ports_inport(j) == 1
             set_param([blk_properties.name '/In' int2str(j)], 'SignalType', 'complex');
         else

@@ -94,15 +94,15 @@ catch
     disp('No write_stimuli block in model');
 end
 
-% generate sw profiling of application
+% generate sw profiling of application not yet fully implemented
 try
     if strcmp(profiling,'on')
-        disp('Generate application graph');
+        disp('Start SW profiling');
         fid_dfg = fopen('app_graph.txt','a');
         fid_dfg = generate_application_graph(mdl_name, fid_dfg);
         fclose(fid_dfg);
-    elseif strcmp(application_graph,'off')
-        disp('No application graph required');
+    elseif strcmp(profiling,'off')
+        disp('No SW profiling required');
     else
         warning('%s is wrong parameter to setup profiling, use ether ''on'' or ''off''',profiling);
     end

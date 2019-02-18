@@ -281,6 +281,11 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
                 connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ACLK]
                 connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ARESETN]
               }
+              if {[expr ${adapter_cnt} < 10]} {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $read_adapter $read_cnt]/M_AXI_MM2S] [get_bd_intf_pins smartconnect_0/S0[expr ${adapter_cnt}]_AXI]
+              } else {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $read_adapter $read_cnt]/M_AXI_MM2S] [get_bd_intf_pins smartconnect_0/S[expr ${adapter_cnt}]_AXI]
+              }
               group_bd_cells [lindex $read_adapter $read_cnt] [get_bd_cells reg_[lindex $read_adapter $read_cnt]] [get_bd_cells dma_[lindex $read_adapter $read_cnt]]
               incr read_cnt
               incr adapter_cnt
@@ -334,6 +339,11 @@ if {[string equal [get_runs -quiet synth_1] ""]} {
                 connect_bd_net $clockport [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ACLK]
                 connect_bd_net [get_bd_pins proc_sys_reset_0/peripheral_aresetn] [get_bd_pins axi_interconnect_0/M[expr ${adapter_cnt}*2+1]_ARESETN]
               }
+              if {[expr ${adapter_cnt} < 10]} {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $write_adapter $write_cnt]/M_AXI_S2MM] [get_bd_intf_pins smartconnect_0/S0[expr ${adapter_cnt}]_AXI]
+              } else {
+                connect_bd_intf_net [get_bd_intf_pins dma_[lindex $write_adapter $write_cnt]/M_AXI_S2MM] [get_bd_intf_pins smartconnect_0/S[expr ${adapter_cnt}]_AXI]
+              }
               group_bd_cells [lindex $write_adapter $write_cnt] [get_bd_cells dma_[lindex $write_adapter $write_cnt]] [get_bd_cells reg_[lindex $write_adapter $write_cnt]]
               incr write_cnt
               incr adapter_cnt
@@ -373,7 +383,7 @@ tclapp::xilinx::designutils::write_ip_integrator_testbench -addToProject -output
 }
 
 source $tb_lib_dir/createTB.tcl
-#add_files -fileset sim_1 -norecurse "$proj_dir/$PROJNAME.sim/test_design_1.vhd"
+add_files -fileset sim_1 -norecurse "$proj_dir/$PROJNAME.sim/test_design_1.vhd"
 set_property top test_design_1 [get_filesets sim_1]
 # save block design
 save_bd_design design_1
