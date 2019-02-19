@@ -27,7 +27,6 @@
 
 function [fid_dfg,dimensions_inport,data_types_inport,dimensions_outport,data_types_outport] = generate_dfg_hw(model, blk_properties, fid_dfg)
 
-ports = get_param(blk_properties.hierarchy,'Ports');
 port_handles = get_param(blk_properties.hierarchy,'PortHandles');
 
 outport_line = get_param(port_handles.Outport,'Line'); % get output connections
@@ -124,25 +123,4 @@ if ~isempty(inport_line)
         add_line(blk_properties.name,['In' int2str(j) '/1'], [blk_properties.org_name '/' int2str(j)],'autorouting','on');
     end
 end
-
-a = RTW.ModelSpecificCPrototype;
-% configure input arguments
-for j=1:ports(1)
-    % Vivado HLS sets scalar pointers always to outputs, therefore
-    % we have to check if input is a single data value
-    if(1 ~= get_scalar_port_dim(cell2mat(dimensions_inport(j,:)),1))
-        addArgConf(a,['In' num2str(j)],'Pointer',['inputArg' num2str(j)], 'const *');
-    else
-        addArgConf(a,['In' num2str(j)],'Value',['inputArg' num2str(j)], 'const');
-    end
-end
-
-% configure output arguments
-for j=1:ports(2)
-    addArgConf(a,['Out' num2str(j)],'Pointer',['outputArg' num2str(j)], 'none');
-end
-setFunctionName(a,[blk_properties.name '_hw'],'step');
-setFunctionName(a,[blk_properties.name '_init'],'init')
-
-attachToModel(a,blk_properties.name);
 end

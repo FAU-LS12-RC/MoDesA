@@ -63,36 +63,39 @@ puts $wfp "</tr>"
 
 
 foreach dir $subdirs {
-  set file [glob -directory $dir -type f *{auxiliary.xml}*]
-  puts "found IPB auxiliary file $file"
-  # Read the auxiliary file
-  set fid [open $file]
-  set filecontent [read $fid]
-  close $fid
-  set filelines [split $filecontent "\n"]
+  if {[catch {set file [glob -directory $dir -type f *{auxiliary.xml}*]} errmsg]} {
+    puts "could not generate HLS HW estimation no auxiliary file found" 
+  } else {
+    puts "found IPB auxiliary file $file"
+    # Read the auxiliary file
+    set fid [open $file]
+    set filecontent [read $fid]
+    close $fid
+    set filelines [split $filecontent "\n"]
 
-  foreach newl $filelines {
-    if {[string first "<xd:acceleratorMap" $newl] != -1} {
-      regexp -all {functionName="(.*?)"} $newl -> blk_name 
-      puts $wfp "<tr>"
-      puts $wfp "<td><b>${blk_name}</b></td>"
-    } elseif {[string first "<xd:latencyEstimates" $newl] != -1} {
-      regexp -all {best-case="(.*?)"} $newl -> bestcase 
-      regexp -all {worst-case="(.*?)"} $newl -> worstcase 
-      regexp -all {average-case="(.*?)"} $newl -> averagecase 
-      puts $wfp "<td>${bestcase}</td>"
-      puts $wfp "<td>${worstcase}</td>"
-      puts $wfp "<td>${averagecase}</td>"
-    } elseif {[string first "<xd:resourceEstimates" $newl] != -1} {
-      regexp -all {LUT="(.*?)"} $newl -> lut
-      regexp -all {FF="(.*?)"} $newl -> ff
-      regexp -all {BRAM="(.*?)"} $newl -> bram
-      regexp -all {DSP="(.*?)"} $newl -> dsp 
-      puts $wfp "<td>${lut}</td>"
-      puts $wfp "<td>${ff}</td>"
-      puts $wfp "<td>${bram}</td>"
-      puts $wfp "<td>${dsp}</td>"
-      puts $wfp "</tr>"
+    foreach newl $filelines {
+      if {[string first "<xd:acceleratorMap" $newl] != -1} {
+        regexp -all {functionName="(.*?)"} $newl -> blk_name 
+        puts $wfp "<tr>"
+        puts $wfp "<td><b>${blk_name}</b></td>"
+      } elseif {[string first "<xd:latencyEstimates" $newl] != -1} {
+        regexp -all {best-case="(.*?)"} $newl -> bestcase 
+        regexp -all {worst-case="(.*?)"} $newl -> worstcase 
+        regexp -all {average-case="(.*?)"} $newl -> averagecase 
+        puts $wfp "<td>${bestcase}</td>"
+        puts $wfp "<td>${worstcase}</td>"
+        puts $wfp "<td>${averagecase}</td>"
+      } elseif {[string first "<xd:resourceEstimates" $newl] != -1} {
+        regexp -all {LUT="(.*?)"} $newl -> lut
+        regexp -all {FF="(.*?)"} $newl -> ff
+        regexp -all {BRAM="(.*?)"} $newl -> bram
+        regexp -all {DSP="(.*?)"} $newl -> dsp 
+        puts $wfp "<td>${lut}</td>"
+        puts $wfp "<td>${ff}</td>"
+        puts $wfp "<td>${bram}</td>"
+        puts $wfp "<td>${dsp}</td>"
+        puts $wfp "</tr>"
+      }
     }
   }
 }  

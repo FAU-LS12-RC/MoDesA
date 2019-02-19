@@ -26,7 +26,14 @@
 ##
 
 # Read content of Data-Flow Graph (DFG)
-set fid [open ${MODELNAME}_hw/dfg_hw.txt]
+if { [file exists ${MODELNAME}_hw/dfg_hw.txt] == 1} {
+  set fid [open ${MODELNAME}_hw/dfg_hw.txt]
+} elseif {[file exists ${MODELNAME}_chip/dfg_hw.txt] == 1} {
+  set fid [open ${MODELNAME}_chip/dfg_hw.txt]
+} else {
+  puts "No Dataflow file found !!!"
+}
+
 set content [read $fid]
 close $fid
 

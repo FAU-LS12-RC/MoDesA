@@ -83,13 +83,13 @@ classdef model
             nr_hw_blk_ip = size(find_system(obj.mdl_name_trimmed,'FindAll','on','regexp','on','Tag','^hw_ip')); % search for blocks starting with hw_ip
             nr_hw_blk_chip = size(find_system(obj.mdl_name_trimmed,'FindAll','on','regexp','on','Tag','^hw_chip')); % search for blocks starting with hw_ip
             mkdir([obj.file_dir]);
-            if nr_hw_blk_ip(1) > 1 % generate folders if we have at least one hw block
+            if nr_hw_blk_ip(1) > 0 % generate folders if we have at least one hw block
               fprintf('Found HW ip block code generation is starting...\n');
               for i=1:obj.n_blocks
                   generate_folder(obj.blocks{i});
               end
             end  
-            if nr_hw_blk_chip(1) > 1 % generate folders if we found at least one hw_chip block in the model
+            if nr_hw_blk_chip(1) > 0 % generate folders if we found at least one hw_chip block in the model
               fprintf('Found HW chips block code generation is starting...\n');
               mkdir([obj.file_dir '_chip']);
             end  

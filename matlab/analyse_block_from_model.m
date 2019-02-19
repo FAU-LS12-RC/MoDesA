@@ -92,9 +92,46 @@ if contains(tag,'hw')
         [fid_dfg,dimensions_inport,data_types_inport,dimensions_outport,data_types_outport] = generate_dfg_hw(model, blk_properties, fid_dfg);
         % here we use the matlab target language compiler to influence code
         % generation specific for hw ip_blocks and hw_chips
+        ports = get_param(blk_properties.hierarchy,'Ports');
         if strcmp(tag,'hw_ip') % if the block should be realized as hw_ip
+            a = RTW.ModelSpecificCPrototype;
+            % configure input arguments
+            for j=1:ports(1)
+                % Vivado HLS sets scalar pointers always to outputs, therefore
+                % we have to check if input is a single data value
+                if(1 ~= get_scalar_port_dim(cell2mat(dimensions_inport(j,:)),1))
+                    addArgConf(a,['In' num2str(j)],'Pointer',['inputArg' num2str(j)], 'const *');
+                else
+                    addArgConf(a,['In' num2str(j)],'Value',['inputArg' num2str(j)], 'const');
+                end
+            end
+            
+            % configure output arguments
+            for j=1:ports(2)
+                addArgConf(a,['Out' num2str(j)],'Pointer',['outputArg' num2str(j)], 'none');
+            end
+            setFunctionName(a,[blk_properties.name '_hw'],'step');
+            setFunctionName(a,[blk_properties.name '_init'],'init')
+            
+            attachToModel(a,blk_properties.name);
+
             hw_optimizer(model_name);
         elseif strcmp(tag,'hw_chip') %or hw_chip block
+            a = RTW.ModelSpecificCPrototype;
+            % configure input arguments
+            for j=1:ports(1)
+              addArgConf(a,['In' num2str(j)],'Pointer',['inputArg' num2str(j)], 'const *');
+            end
+            
+            % configure output arguments
+            for j=1:ports(2)
+                addArgConf(a,['Out' num2str(j)],'Pointer',['outputArg' num2str(j)], 'none');
+            end
+            setFunctionName(a,[blk_properties.name '_hw'],'step');
+            setFunctionName(a,[blk_properties.name '_init'],'init')
+            
+            attachToModel(a,blk_properties.name);
+            
             sw_config(model_name);
         end
         

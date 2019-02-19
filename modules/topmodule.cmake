@@ -85,7 +85,7 @@ function(topmodule synthesis matlab profiling model_name model_path device clk s
     message(STATUS "Makefile successfully generated")
 
     # generate block design only if we previously tagged blocks as hw 
-    if(EXISTS "${CMAKE_BINARY_DIR}/${model_name}_hw" OR "${CMAKE_BINARY_DIR}/${model_name}_chip")
+    if(EXISTS "${CMAKE_BINARY_DIR}/${model_name}_hw" OR EXISTS "${CMAKE_BINARY_DIR}/${model_name}_chip")
       createBlockdesign(${model_name} ${ip_repo})
       message(STATUS "run make all to generate all IP-Blocks")
       message(STATUS "then run make Vivado_${model_name} to create Vivado project")
