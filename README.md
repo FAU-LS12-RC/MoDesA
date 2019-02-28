@@ -1,12 +1,23 @@
 # MoDesA
-MoDesA is an automated systematic design flow that couples model-based design and simulation with Xilinx Vivado High-Level-Synthesis (HLS) for hybrid hardware and software implementations and was presented on the [ReConFig18](http://www.reconfig.org/) conference. 
+MoDesA is an automated systematic design flow that couples model-based design and simulation with Xilinx Vivado High-Level-Synthesis (HLS) for hybrid hardware and software implementations.
 It makes use of the modeling and simulation environment MATLAB/Simulink. 
 MoDesA is used for designing, simulating, prototyping, and testing different hardware/software solutions for Xilinx Zynq Programmable System-on-Chip (PSoC) architectures. 
 
 Based on a tagging scheme, a manual partitioning of Simulink blocks onto resources is possible. 
 Thereby, the proposed methodology allows to automatically explore different hardware and software implementation variants from a single behavioral Simulink model. 
 The tool flow presents itself as a very powerful and user-friendly design tool for improving productivity. 
-A more detailed description can be found in the paper [Model-Based Design Automation of Hardware/Software Co-Designs for Xilinx Zynq PSoCs](https://www.researchgate.net/publication/330728498_Model-Based_Design_Automation_of_HardwareSoftware_Co-Designs_for_Xilinx_Zynq_PSoCs)
+A technical [paper](https://www.researchgate.net/publication/330728498_Model-Based_Design_Automation_of_HardwareSoftware_Co-Designs_for_Xilinx_Zynq_PSoCs) about MoDesA was presented at the [2018 International Conference on ReConFigurable Computing and FPGAs (ReConFig)](http://www.reconfig.org/). If you are using MoDesA and want to cite it, please reference the paper as follows: 
+
+```bash
+@inproceedings{streit2018model,
+  title={Model-Based Design Automation of Hardware/Software Co-Designs for Xilinx Zynq PSoCs},
+  author={Streit, Franz-Josef and Letras, Martin and Wildermann, Stefan and Hackenberg, Benjamin and Falk, Joachim and Becher, Andreas and Teich, J{\"u}rgen},
+  booktitle={2018 International Conference on ReConFigurable Computing and FPGAs (ReConFig)},
+  pages={1--8},
+  year={2018},
+  organization={IEEE}
+}
+```
 
 ## Usage
 The user can specify a model in MATLAB/Simulink by interconnecting functional blocks from the Simulink library.
