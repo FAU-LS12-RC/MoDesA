@@ -62,8 +62,8 @@ set num_inports [llength $tb_inports]
 set num_outports [llength $tb_outports]
 
    # get real interface names from block design
-set in_ports [get_bd_intf_ports -filter {NAME =~ "*inputArg*"}]
-set out_ports [get_bd_intf_ports -filter {NAME =~ "*outputArg*"}]
+set in_ports [lsort -dictionary [get_bd_intf_ports -filter {NAME =~ "*inputArg*"}]]
+set out_ports [lsort -dictionary [get_bd_intf_ports -filter {NAME =~ "*outputArg*"}]]
 
 set counter_init_in 0
 set counter_init_out 0
@@ -77,9 +77,10 @@ set counter_init_out 0
 #set frame sizes for multiple in and out ports
 for {set i 0} {$i < $num_inports} {incr i} {
     #set input path for stimuli files
-    append stimuli_in "FILE_IN${i}: string := \"$BUILDDIR/stimuli/input[expr $i+1]/0.hex\";\n"
+    append stimuli_in "FILE_IN${i}: string := \"$BUILDDIR/stimuli/input$i/0.hex\";\n"
     # set real interface names from block design
     lset tb_inports ${i} 0 [string trimleft [lindex $in_ports ${i}] "/"]
+    lset tb_inports ${i} 2 [get_property CONFIG.TDATA_NUM_BYTES [get_bd_intf_pins [lindex $tb_inports ${i} 0]]]
     # set init values depending on byte size e.g. 0x0000 for 2 bytes
     set tmp "00"
     for {set j 1} {$j < [lindex $tb_inports $i 2]} {incr j} {
@@ -115,10 +116,11 @@ for {set i 0} {$i < $num_inports} {incr i} {
 
 for {set i 0} {$i < $num_outports} {incr i} {
     # create directories for output files per outport
-    file mkdir "$BUILDDIR/stimuli/output[expr $i+1]"
-    append stimuli_out "FILE_OUT${i}: string := \"$BUILDDIR/stimuli/output[expr $i+1]/0.hex\";\n"
+    file mkdir "$BUILDDIR/stimuli/output$i"
+    append stimuli_out "FILE_OUT${i}: string := \"$BUILDDIR/stimuli/output$i/0.hex\";\n"
     # set real interface names from block design
     lset tb_outports ${i} 0 [string trimleft [lindex $out_ports ${i}] "/"]
+    lset tb_outports ${i} 2 [get_property CONFIG.TDATA_NUM_BYTES [get_bd_intf_pins [lindex $tb_outports ${i} 0]]]
     # set init values depending on byte size e.g. 0x0000 for 2 bytes
     set tmp "00"
     for {set j 1} {$j < [lindex $tb_outports $i 2]} {incr j} {

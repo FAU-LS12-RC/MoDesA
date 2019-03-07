@@ -27,6 +27,8 @@
 %%
 
 function [bytes] = get_port_byte_size(data_type)
+    %Remove leading and trailing whitespace from string
+    data_type = strtrim(data_type);
     switch data_type
         case 'double'
             bytes = 8;
