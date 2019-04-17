@@ -54,7 +54,7 @@ In the [CMakeLists.txt](CMakeLists.txt) file the user specifies the following pa
 The generated hardware IP blocks are using the AXI4-Stream interface for pipelined data streaming, which only supports sequential data access. 
 Unfortunately, not all blocks within the Simulink library comply with these access patterns, and if this cannot be guaranteed, the synthesis will fail. 
 To address this issue, we provide a Simulink block called frame_buffer. 
-This block is available in our custom library [MoDesA_lib](matlab/MoDesA_lib.slx). In addition, to generate stimuli files for hardware verification the [MoDesA_lib](matlab/MoDesA_lib.slx) provides a write stimuli block, which can be inserted in the model.
+This block is available in our custom Simulink library [MoDesA_lib](matlab/lib/MoDesA_lib.slx). In addition, to generate stimuli files for hardware verification the [MoDesA_lib](matlab/lib/MoDesA_lib.slx) provides a write stimuli block, which can be inserted in the model.
 
 ### Prerequisites
 * C/C++ Compiler like GCC on Linux or MSVC on Windows
@@ -69,6 +69,9 @@ If your current version is newer than R2017.a, (the provided test models were cr
 If your current version is older than R2017.a, send us a mail and we will export the test models to your version.
 
 Next, make sure MATLAB, Vivado and Vivado HLS is set in your environment PATH variable and can be accessed from the command line.
+Furthermore, within the MATLAB environment navigate to the matlab folder and add the [MoDesA_lib](matlab/lib) custom library to the session by typing `addpath('lib')`.
+If you now open the [test_model_hw_only](models/test_model/test_model_hw_only.slx) model in Simulink the write_stimuli blocks should show up.
+The rest of the code generation process is depending on your operating system.
 
 ### On Unix/Linux
 Open a terminal and run:
