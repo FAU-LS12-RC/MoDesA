@@ -434,7 +434,7 @@ begin
         else
             if(data_in_valid= '1' and r_reg_ready='1') then
                 reg_data0 <= data_in(31 downto 0);
-                reg_data1 <= std_logic_vector(resize(signed(data_in(DATA_WIDTH downto 32)), reg_data1'length));
+                reg_data1 <= std_logic_vector(resize(signed(data_in(DATA_WIDTH-1 downto 32)), reg_data1'length));
                 r_reg_ready <= '0';
             end if;
         end if;    
