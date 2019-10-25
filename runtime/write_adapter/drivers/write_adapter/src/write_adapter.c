@@ -49,7 +49,7 @@ u32 pop_data(write_adapter *control, XAxiDma * InstancePtr, void* data, pop_size
 
   if (reg_en_write_adapt == control->use_reg) {
     u32 lsb_word;
-    s32 msb_word;
+    s64 msb_word;
     switch (size) {
       case pop_32_bit:
         *(s32 *) data = control->lsb_pop;
@@ -57,7 +57,7 @@ u32 pop_data(write_adapter *control, XAxiDma * InstancePtr, void* data, pop_size
       case pop_64_bit:
         lsb_word = control->lsb_pop;
         msb_word = control->msb_pop;
-        *(s64 *) data = (msb_word & lsb_word);
+        *(s64 *) data = (msb_word<<32 | lsb_word);
         break;
       default:
         *(s32 *) data = control->lsb_pop;
