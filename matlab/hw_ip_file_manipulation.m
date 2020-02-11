@@ -59,7 +59,11 @@ ports = get_param(blk_properties.hierarchy,'Ports');
             if (~contains(tline, ");")) && (~contains(tline, "(")) && (~contains(tline, "const"))
                 tline = strtrim(tline);
                 tmp = extractBefore(tline,";"); %extract global variables
-                glob_vars{end+1} = erase([tmp ';\n'],"extern "); % and remove the extern keyword
+                if contains(tmp, 'initState')
+                  glob_vars{end+1} = replace([tmp ';\n'],"extern ",'volatile '); % declare init state values as volatile so Vivado HLS knows to handle it
+                else
+                  glob_vars{end+1} = erase([tmp ';\n'],"extern "); % and remove the extern keyword
+                end
                 continue;
             end
         end

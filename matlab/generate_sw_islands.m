@@ -137,10 +137,16 @@ else
     disp('variable tmp_name_island is empty !!!');
 end
 
+% start from the second element in the list
+% and check if any repeated islands are in the list
 for i=2:length(tmp_islands)
-    [tmp_islands_in_model,name_island] = add_island_in_list(...
-        tmp_islands_in_model,tmp_islands{i},name_island,...
-        tmp_name_island{i});
+
+    [element_in_list] = verifiy_equality_island(tmp_islands{i-1},tmp_islands{i});
+    
+    if ~element_in_list
+        tmp_islands_in_model{end+1} = tmp_islands{i-1};
+        name_island{end+1} = tmp_name_island{i};
+    end
 end
 
 % ONCE WE KNOW THE CLUSTERS IN THE MODEL, WE PROCEED TO CREATE A
@@ -228,24 +234,6 @@ end
 delete([model '.slx']);
 % pack island information into struct and return it
 islands_in_model = struct('name_island',name_island,'blocks',tmp_islands_in_model);
-end
-
-% This function is similar to a write operation in a set, the differences
-% are the input parameters, the first one is a list of cell arrays and the
-% second one is a cell array
-function [list_out,list_out_names] = add_island_in_list(list,island,list_names,name)
-
-for i=1:length(list)
-    current_element = list{i};
-    [element_in_list] = verifiy_equality_island(island,current_element);
-    
-    if ~element_in_list
-        list{end+1} = island;
-        list_names{end+1} = name;
-    end
-end
-list_out = list;
-list_out_names = list_names;
 end
 
 function [result] = verifiy_equality_island(island1,island2)

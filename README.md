@@ -123,14 +123,17 @@ Vivado will use the automatically generated testbench and stimuli files for simu
  <img src="img/hw_only_waveform.png" alt="Test model hw_only waveform" class="center" width="100%" height="100%"\>
 </p>
 
-## Currently known Simulink blocks that require special treatment 
+## Currently known Simulink blocks that require special block parameters: 
+Every block with an internal condition value requires the selection of non default state attributes in their block parameters.
+Here, a state name needs to be declared starting with `initState` together with a unique number. In addition, the storage class for code generation need to be changed to be `ExportedGlobal`.
+This applies to blocks like the Memory, Unit Delay, Discrete-Time Integrator and Discrete Transfer Fcn block among others with initial states.
+
+Other known blocks so far:
 Block                            | Reason
 ---------------------------------|------------------------------------------------------------
-Memory                           | Requires storage class for code generation as ExportedGlobal
-Unit Delay                       | Requires storage class for code generation as ExportedGlobal 
 Median                           | Requires Insertion sort as sort algorithm 
 
-## Currently known Simulink blocks that require manual adaption for HLS
+## Currently known Simulink blocks that require manual adaption of the generated HLS C code:
 Block                            | Reason
 ---------------------------------|------------------------------------------------------------
 Estimate Geometric Transformation| Uses rand() and srand() in generated code

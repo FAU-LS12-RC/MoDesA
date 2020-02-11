@@ -72,14 +72,14 @@ function hw_optimizer(model_name)
    set_param(cs,'MemcpyThreshold','2147483647'); % highest possible value avoids also memcpy for int values
    set_param(cs,'InitFltsAndDblsToZero','off');
    set_param(cs,'ZeroInternalMemoryAtStartup', 'on'); %initializes internal data to zero important to break algebraic loops
-   set_param(cs,'ZeroExternalMemoryAtStartup', 'off'); %
+   %set_param(cs,'ZeroExternalMemoryAtStartup', 'off'); %
    set_param(cs,'SuppressErrorStatus', 'on'); % omits the error status field from the generated real-time model data structure rtModel. This option reduces memory usage.
    set_param(cs,'GlobalDataDefinition','InSourceFile'); % specify where to place definitions of global variables.
    set_param(cs,'GlobalDataReference','InSourceFile'); % specify where extern, typedef, and #define statements are to be declared.
    set_param(cs,'MaxStackSize','inf'); %If you specify the maximum stack to be inf, then the generated code contains the least number of global variables.
    set_param(cs,'GlobalVariableUsage','Minimize global data access'); % Minimize use of global variables by using local variables to hold intermediate values.
    set_param(cs,'GlobalBufferReuse','off');
-   set_param(cs,'OptimizeBlockIOStorage','on'); %'on' Simulink software reuses memory buffers allocated to store block input and output signals, reducing the memory requirements. 
+   set_param(cs,'OptimizeBlockIOStorage','off'); %'on' Simulink software reuses memory buffers allocated to store block input and output signals, reducing the memory requirements. 
    set_param(cs,'LocalBlockOutputs','on'); %Specify whether block signals are declared locally or globally
    set_param(cs,'BufferReuse','off'); %Specify whether Simulink® Coder™ software reuses signal memory.
    set_param(cs,'OptimizeDataStoreBuffers','off');
